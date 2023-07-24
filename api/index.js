@@ -14,9 +14,12 @@ const app = express()
 dotenv.config();
 app.use(express.json())
 app.use(cors())
+
 app.use('/uploads', express.static(__dirname + '/uploads'));
+app.use('/profilePic', express.static(__dirname + '/profilePic'));
 
 const upload = multer({dest: './uploads/'})
+const profilePic = multer({dest: './profilePic/'})
 
 const db = mysql.createConnection({
     host:"localhost",
@@ -56,6 +59,31 @@ app.post('/',upload.single('file'),(req,res) => {
         })
 
     } catch (error) {
+        console.log(error)   
+    }
+})
+
+app.post('/register',profilePic.single('profilePic'),(req,res) => {
+    try {
+        if(req.file == undefined){
+            res.status(400).json("Please upload a image also")
+            return;
+        }
+        const { originalname,path } = req.file;
+        const parts = originalname.split('.');
+        const ext = parts[parts.length - 1];
+        const newPath = path+'.'+ext;
+        fs.renameSync(path,newPath);
+
+        const {name,email,pass,phoneNo} = req.body;
+        const query = "Insert into users (`name`,`email`,`pass`,`phoneNo`,`profilePic`)  values (?,?,?,?,?);"
+        db.query(query,[name,email,pass,phoneNo,newPath],(err,data) => {
+            if(err) res.json("Error in uploading file"+err)
+            else res.json("User registered successfully")
+        })
+
+    } catch (error) {
+        console.log("from index file here")
         console.log(error)   
     }
 })
