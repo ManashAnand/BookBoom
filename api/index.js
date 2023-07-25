@@ -4,6 +4,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const multer = require('multer');
 const fs = require('fs');
+const bcrypt = require('bcryptjs')
 
 
 // const require = createRequire(import.meta.url);
@@ -13,7 +14,7 @@ const fs = require('fs');
 const app = express()
 dotenv.config();
 app.use(express.json())
-app.use(cors())
+app.use(cors());
 
 app.use('/uploads', express.static(__dirname + '/uploads'));
 app.use('/profilePic', express.static(__dirname + '/profilePic'));
@@ -76,6 +77,10 @@ app.post('/register',profilePic.single('profilePic'),(req,res) => {
         fs.renameSync(path,newPath);
 
         const {name,email,pass,phoneNo} = req.body;
+
+        // const salt = bcrypt.genSaltSync(20);
+        // const hash = bcrypt.hashSync(pass, salt);
+
         const query = "Insert into users (`name`,`email`,`pass`,`phoneNo`,`profilePic`)  values (?,?,?,?,?);"
         db.query(query,[name,email,pass,phoneNo,newPath],(err,data) => {
             if(err) res.json("Error in uploading file"+err)
