@@ -35,7 +35,13 @@ try {
         formData.append('phoneNo',phoneNo);
         const {data} = await axios.post('http://localhost:8800/register',formData);
             if(data){
-                navigate('/login');
+                console.log(data);
+                if(data?.err){
+                  alert("Email already in use. Please Logged In");
+                }
+                else{
+                  navigate('/login');
+                }
             }
     } catch (error) {
         console.log("from here")

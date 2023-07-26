@@ -10,6 +10,7 @@ const bcrypt = require('bcryptjs')
 // const require = createRequire(import.meta.url);
 
 // console.log(dirname)
+const salt = process.env.SALT;
 
 const app = express()
 dotenv.config();
@@ -78,12 +79,12 @@ app.post('/register',profilePic.single('profilePic'),(req,res) => {
 
         const {name,email,pass,phoneNo} = req.body;
 
-        // const salt = bcrypt.genSaltSync(20);
-        // const hash = bcrypt.hashSync(pass, salt);
+        
+        const hash = bcrypt.hashSync(pass, salt);
 
         const query = "Insert into users (`name`,`email`,`pass`,`phoneNo`,`profilePic`)  values (?,?,?,?,?);"
-        db.query(query,[name,email,pass,phoneNo,newPath],(err,data) => {
-            if(err) res.json("Error in uploading file"+err)
+        db.query(query,[name,email,hash,phoneNo,newPath],(err,data) => {
+            if(err) res.json({err:"Error in uploading file"+err})
             else res.json("User registered successfully")
         })
 
@@ -91,6 +92,29 @@ app.post('/register',profilePic.single('profilePic'),(req,res) => {
         console.log("from index file here")
         console.log(error)   
     }
+})
+
+app.post('/login',(req,res) => {
+    try {
+        const {email,pass} = req.body;
+        // console.log(email+" "+pass);
+        const hash = bcrypt.hashSync(pass, salt);
+
+
+        if(bcrypt.compareSync(pass, hash)){
+            const q = "SELECT id,name, email, phoneNo, profilePic FROM users WHERE email = ?;";
+            db.query(q,[email],(err,data) => {
+                if(err) res.json("Error in finding email "+err);
+                else res.json(data)
+            })
+        }
+        else{
+            res.json("Password doesn't match");
+        }
+        
+    } catch (error) {
+            console.log(error);
+    }   
 })
 
 app.listen(8800,() => {

@@ -12,8 +12,7 @@ interface Book {
     item: Book;
   }
 
-const Card:React.FC<CardProps> = ({item}) => {
-    // console.log(item)  
+const Card:React.FC<CardProps> = ({item}) => {  
     const navigate = useNavigate();
     return (
    <>

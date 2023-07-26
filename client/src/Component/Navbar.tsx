@@ -1,8 +1,11 @@
 
 import { NavLink } from 'react-router-dom'
 import mainLogo from '../assets/mainLogo.png'
+import { userAuth } from '../context/UserContext'
 
 const Navbar = () => {
+  const {userData} = userAuth();
+
   return (
     <>
       
@@ -43,7 +46,7 @@ const Navbar = () => {
           <NavLink to="/Login" className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Login</NavLink>
         </li>
         <li>
-        <img className="w-10 h-10 rounded-full" src="" alt="Rounded avatar"></img>
+       {userData && <img className="w-10 h-10 rounded-full" src="" alt="Rounded avatar"></img>}
         </li>
       </ul>
     </div>
