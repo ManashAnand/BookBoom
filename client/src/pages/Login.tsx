@@ -6,7 +6,8 @@ import { userAuth } from "../context/UserContext";
 const Login = () => {
     const [email,setEmail] = useState("");
     const [pass,setPass] = useState("");
-    const {setUserData} = userAuth();
+    const {userData,setUserData} = userAuth();
+    console.log("The userData is "+userData);
 
     
     const handleLogin = async (e:any) => {

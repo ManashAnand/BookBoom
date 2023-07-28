@@ -1,11 +1,11 @@
-import React, { ReactNode, createContext, useContext, useState } from 'react';
-import { useEffect } from 'react';
+import React, { ReactNode, createContext, useContext, useState,useEffect } from 'react';
+
 
 interface UserContextProps {
   children: ReactNode;
 }
 
-const UserContext = createContext<any>(null);
+const UserContext = createContext<any>("Working from context");
 const userAuth = () => useContext(UserContext);
 
 const UserContextProvider: React.FC<UserContextProps> = ({ children }) => {
