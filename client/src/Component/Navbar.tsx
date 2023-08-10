@@ -1,11 +1,14 @@
 
 import { NavLink } from 'react-router-dom'
 import mainLogo from '../assets/mainLogo.png'
-import { userAuth } from '../context/UserContext'
+import {useSelector} from 'react-redux'
 
-const Navbar = () => {
-  const {userData} = userAuth();
+const Navbar = () => {  
 
+  
+  const UserData  = useSelector( (state:any) => state.user)
+
+  // console.log(UserData?.LoginData)
   return (
     <>
       
@@ -42,11 +45,23 @@ const Navbar = () => {
         <li>
           <NavLink to="/post" className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Create Post</NavLink>
         </li>
+        {
+            !UserData?.LoginData?.email && (
+              <>
         <li>
           <NavLink to="/Login" className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Login</NavLink>
         </li>
+              </>
+            )
+          }
         <li>
-       {userData && <img className="w-10 h-10 rounded-full" src="" alt="Rounded avatar"></img>}
+          {
+            UserData?.LoginData?.email && (
+              <>
+            <img className="w-10 h-10 rounded-full" src={`http://localhost:8800/${UserData?.LoginData?.profilePic}`} alt="Rounded avatar"></img>
+              </>
+            )
+          }
         </li>
       </ul>
     </div>

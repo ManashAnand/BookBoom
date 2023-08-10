@@ -1,24 +1,25 @@
 import axios from "axios";
 import {useState} from "react";
-import { Link } from "react-router-dom";
-import { userAuth } from "../context/UserContext";
+import { Link, useNavigate } from "react-router-dom";
+import {useDispatch} from 'react-redux'  
+import { doLogin } from "../Slice/UserSlice";
 
 const Login = () => {
     const [email,setEmail] = useState("");
     const [pass,setPass] = useState("");
-    const {userData,setUserData} = userAuth();
-    console.log("The userData is "+userData);
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     
     const handleLogin = async (e:any) => {
       e.preventDefault();
       try {
         const {data} = await axios.post('http://localhost:8800/login',{email,pass});
         if(data){
-          console.log(data);
-          setUserData(data?.data);
-        
-
+          // console.log(data);
+          dispatch(doLogin(data));
+          navigate('/')
+          
         }
         else{
           console.log("Error in line 16 login page")
@@ -68,7 +69,7 @@ const Login = () => {
           <div>
             <div className="w-full lg:max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow-xl dark:bg-gray-800">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Sign in to Flowbite
+                Sign in to BookBoon
               </h2>
               <div className="mt-8 space-y-6" >
                 <div>
