@@ -3,14 +3,39 @@ import { NavLink } from "react-router-dom";
 import mainLogo from "../assets/mainLogo.png";
 import { useSelector,useDispatch } from "react-redux";
 import { doLogout } from "../Slice/UserSlice";
+import { useState } from "react";
 
 const Navbar = () => {
-  const UserData = useSelector((state: any) => state.user);
+
+  const [search,setSearch] = useState("");
+
+  const UserData = useSelector((state:any) => state.user);
   const dispatch = useDispatch();
   const handleLogout = () => {
       dispatch(doLogout());
   };
 
+  const debounce = (cb: (...args: string[]) => void, delay = 500) => {
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  
+    return (...args: string[]) => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+  
+      timeoutId = setTimeout(() => {
+        cb(...args);
+      }, delay);
+    };
+  };
+  
+
+  const handleSearch = debounce((value:string) => {
+    
+    setSearch(value)
+  })
+
+  
   return (
     <>
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -55,6 +80,8 @@ const Navbar = () => {
                 id="search-navbar"
                 className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Search..."
+                // value={search}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSearch(e.target.value)}
               />
             </div>
           </div>
