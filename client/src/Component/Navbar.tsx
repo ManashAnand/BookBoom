@@ -4,6 +4,7 @@ import mainLogo from "../assets/mainLogo.png";
 import { useSelector,useDispatch } from "react-redux";
 import { doLogout } from "../Slice/UserSlice";
 import { useState } from "react";
+import axios from "axios";
 
 const Navbar = () => {
 
@@ -15,7 +16,7 @@ const Navbar = () => {
       dispatch(doLogout());
   };
 
-  const debounce = (cb: (...args: string[]) => void, delay = 500) => {
+  const debounce = (cb: (...args: string[]) => void, delay = 2500) => {
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
   
     return (...args: string[]) => {
@@ -30,9 +31,10 @@ const Navbar = () => {
   };
   
 
-  const handleSearch = debounce((value:string) => {
-    
-    setSearch(value)
+  const handleSearch = debounce( async (value:string) => {
+    const {data} = await axios.post('http://localhost:8800/search',{value});
+    console.log(data);
+
   })
 
   

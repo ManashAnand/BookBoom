@@ -124,6 +124,23 @@ app.post("/login", (req, res) => {
   }
 });
 
+app.post("/search", (req, res) => {
+    const {value} = req.body;
+    // console.log(value)
+    const keyword = value; 
+    const q = "SELECT * FROM books WHERE LOWER(name) LIKE ? OR LOWER(descp) LIKE ?";
+    db.query(q, [`%${keyword}%`, `%${keyword}%`], (err, data) => {
+        if(err){
+            console.log("data not found "+ err )
+        }
+        else{
+            console.log(data)
+            res.json(data);
+        }
+    })
+})
+
+
 app.listen(8800, () => {
   console.log("Connected to database");
 });
