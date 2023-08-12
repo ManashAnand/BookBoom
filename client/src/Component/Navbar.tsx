@@ -3,12 +3,10 @@ import { NavLink } from "react-router-dom";
 import mainLogo from "../assets/mainLogo.png";
 import { useSelector,useDispatch } from "react-redux";
 import { doLogout } from "../Slice/UserSlice";
-import { useState } from "react";
 import axios from "axios";
+import { changeData } from "../Slice/BookSlice";
 
 const Navbar = () => {
-
-  const [search,setSearch] = useState("");
 
   const UserData = useSelector((state:any) => state.user);
   const dispatch = useDispatch();
@@ -34,6 +32,7 @@ const Navbar = () => {
   const handleSearch = debounce( async (value:string) => {
     const {data} = await axios.post('http://localhost:8800/search',{value});
     console.log(data);
+    dispatch(changeData(data));
 
   })
 

@@ -1,6 +1,8 @@
 import axios from "axios";
 import Card from "../Component/Card";
-import react, { useState,useEffect } from "react";
+import  { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { changeData } from "../Slice/BookSlice";
 
 const Homepage = () => {
   interface Book {
@@ -11,18 +13,32 @@ const Homepage = () => {
     cover: string;
   }
 
-  const [books,setBooks] = useState([]);
+  interface RootState {
+    books: Book[]; 
+  }
+  
+
+
+  const books = useSelector((state:RootState) => state.books )
+console.log("from mainpage")
+console.log(books)
+  const dispatch = useDispatch();
 
 
   useEffect(() => {
     getData();  
   }, []);
 
+  // useEffect(() => {
+  //   getData();
+  // },[books])
+
   const getData = async () => {
     try {
         const {data} = await axios.get('http://localhost:8800/');
         console.log(data);
-        setBooks(data);
+        // setBooks(data);
+        dispatch(changeData(data))
         
     } catch (error) {
         console.log(error)

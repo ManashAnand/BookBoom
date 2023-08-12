@@ -6,15 +6,15 @@ const multer = require("multer");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 
-// const require = createRequire(import.meta.url);
-
-// console.log(dirname)
 const salt = process.env.SALT;
 
 const app = express();
 dotenv.config();
 app.use(express.json());
 app.use(cors());
+
+
+
 
 app.use("/uploads", express.static(__dirname + "/uploads"));
 app.use("/profilePic", express.static(__dirname + "/profilePic"));
@@ -28,6 +28,8 @@ const db = mysql.createConnection({
   password: process.env.PASSWORD,
   database: "bookstore",
 });
+
+
 
 app.get("/", (req, res) => {
   const query = "SELECT * FROM books;";
@@ -134,7 +136,6 @@ app.post("/search", (req, res) => {
             console.log("data not found "+ err )
         }
         else{
-            console.log(data)
             res.json(data);
         }
     })
