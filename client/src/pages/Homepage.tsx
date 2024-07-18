@@ -43,7 +43,7 @@ console.log(books)
     } catch (error) {
         console.log(error)
     }
-};
+}; 
 
   return (
     <>
